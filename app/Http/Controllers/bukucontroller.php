@@ -42,7 +42,7 @@ class BukuController extends Controller
         return redirect()->route('buku.index')->with('success', 'Buku berhasil ditambahkan!');
     }
 
-    public function edit(string $id)
+    public function edit(string $id)    
     {
         $buku = Buku::find($id);
         if (!$buku) {
@@ -61,7 +61,8 @@ class BukuController extends Controller
             'Penerbit' => 'required|string|max:255',
             'Penulis' => 'required|string|max:255',
             'NamaKategori' => 'required|string|max:255|exists:kategori,NamaKategori',
-        ]);
+        ]); 
+         
           
         try {
             $buku = Buku::find($id); 
