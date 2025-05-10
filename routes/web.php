@@ -6,13 +6,23 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use App\Models\Buku;
+use App\Models\Kategori;
+use App\Models\Peminjaman;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard', [
+        'totalUser' => User::count(),
+        'totalBuku' => Buku::count(),
+        'totalKategori' => Kategori::count(),
+        'totalPeminjaman' => Peminjaman::count(),
+        'peminjamanTerbaru' => Peminjaman::with(['user', 'buku'])->latest()->take(5)->get(),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
