@@ -25,22 +25,21 @@ class PeminjamanController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi form input
-        $validatedData = $request->validate([
-            'UserID' => 'required|exists:users,id',  // Pastikan UserID valid
-            'BukuID' => 'required|exists:buku,BukuID',  // Pastikan BukuID valid
-            'TanggalPeminjaman' => 'required|date',
-            'TanggalPengembalian' => 'nullable|date',
-            'StatusPeminjaman' => 'required|string|max:50',
+        $request->validate([
+            'UserID' => 'required|exists:users,id',
+            'BukuID' => 'required|exists:buku,BukuID',
+            'TanggalPeminjaman' => 'required|date|before:9999-12-31|after:1000-01-01',
+            'TanggalPengembalian' => 'nullable|date|before:9999-12-31|after:1000-01-01',
+            'StatusPeminjaman' => 'required'
         ]);
 
         // Simpan data peminjaman ke database
         $peminjaman = new Peminjaman();
-        $peminjaman->UserID = $validatedData['UserID'];
-        $peminjaman->BukuID = $validatedData['BukuID'];
-        $peminjaman->TanggalPeminjaman = $validatedData['TanggalPeminjaman'];
-        $peminjaman->TanggalPengembalian = $validatedData['TanggalPengembalian'];
-        $peminjaman->StatusPeminjaman = $validatedData['StatusPeminjaman'];
+        $peminjaman->UserID = $request->UserID;
+        $peminjaman->BukuID = $request->BukuID;
+        $peminjaman->TanggalPeminjaman = $request->TanggalPeminjaman;
+        $peminjaman->TanggalPengembalian = $request->TanggalPengembalian;
+        $peminjaman->StatusPeminjaman = $request->StatusPeminjaman;
         $peminjaman->save();
 
         return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil ditambahkan!');
