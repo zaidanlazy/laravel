@@ -16,12 +16,27 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    // Ambil data user per bulan tahun ini
+    $userPerMonth = User::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+        ->whereYear('created_at', date('Y'))
+        ->groupBy('month')
+        ->orderBy('month')
+        ->pluck('total', 'month')
+        ->toArray();
+
+    // Siapkan array 12 bulan (Jan - Dec)
+    $userChartData = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $userChartData[] = $userPerMonth[$i] ?? 0;
+    }
+
     return view('dashboard', [
         'totalUser' => User::count(),
         'totalBuku' => Buku::count(),
         'totalKategori' => Kategori::count(),
         'totalPeminjaman' => Peminjaman::count(),
         'peminjamanTerbaru' => Peminjaman::with(['user', 'buku'])->latest()->take(5)->get(),
+        'userChartData' => $userChartData,
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
