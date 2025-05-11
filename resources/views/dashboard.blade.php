@@ -267,10 +267,10 @@
     const loanChart = new Chart(loanCtx, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
                 label: 'Loans',
-                data: [42, 38, 45, 52, 68, 62, 75],
+                data: @json($loanChartData),
                 backgroundColor: '#1cc88a',
                 hoverBackgroundColor: '#17a673',
                 borderColor: '#1cc88a',
